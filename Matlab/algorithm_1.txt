@@ -1,0 +1,4 @@
+problem_1 10 1.0
+problem_2 10 2.0
+problem_3 10 3.0
+problem_4 10 4.0
