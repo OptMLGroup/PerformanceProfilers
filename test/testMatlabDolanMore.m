@@ -1,20 +1,19 @@
-function performance_profiler_launcher
+function testMatlabDolanMore
 
-% performance_profiler_launcher
+% testMatlabDolanMore
 %
 % Author      : Frank E. Curtis
-% Description : Calls performance_profiler.m to generate a Dolan & Moré
-%               performance profile using inputs given in this function
+% Description : Tests Matlab implementation of Dolan and Moré profiler.
 % Note        : This file provides the following inputs:
 %
 % files       ~ names of input files containing performance measure data
 % algorithms  ~ names of algorithms corresponding to the input files
 % file_format ~ string indicating format of each line of input files
 % column      ~ column containing performance measure data of interest
-% log_scale   ~ indicates whether to use log scaling for profile
-% tau_max     ~ maximum ratio to consider
+% options     ~ struct of (optional) options
+%               see profilerDolanMore for more information about options
 %
-% Example     : Suppose that there are two input files:
+% Example : Suppose that there are two input files:
 %
 % algorithm_1.txt, with contents (two lines only):
 % problem_1  1  2.0
@@ -30,14 +29,14 @@ function performance_profiler_launcher
 % performance profile for the number of iterations required, the inputs
 % could be given as follows:
 %
-% files = {'algorithm_1.txt','algorithm_2.txt'};
-% algorithms = {'Algorithm 1','Algorithm 2'};
-% file_format = '%s %d %f';
-% column = 2;
-% log_scale = true;
-% max_ratio = inf;
+% >> files = {'algorithm_1.txt','algorithm_2.txt'};
+% >> algorithms = {'Algorithm 1','Algorithm 2'};
+% >> file_format = '%s %d %f';
+% >> column = 2;
+% >> options.log_scale = true;
+% >> options.max_ratio = inf;
 %
-% Notes       :
+% Notes :
 % - Use a negative value to indicate failure to solve a problem
 % - All other performance measure values should be strictly positive (not zero)
 % - All lines of the input files must have the same format
@@ -45,13 +44,13 @@ function performance_profiler_launcher
 
 % Files containing data
 files = {
-  'algorithm_1.txt',
+  'algorithm_1.txt'
   'algorithm_2.txt'
 };
 
 % Algorithms associated with files
 algorithms = {
-  'Algorithm 1',
+  'Algorithm 1'
   'Algorithm 2'
 };
 
@@ -62,10 +61,13 @@ file_format = '%s %d %f';
 column = 2;
 
 % Log scale?
-log_scale = false;
+options.log_scale = false;
 
 % Maximum ratio?
-tau_max = inf;
+options.tau_max = inf;
+
+% Add location of profiler to path
+addpath('../src/Matlab/');
 
 % Call profiler
-performance_profiler(files,algorithms,file_format,column,log_scale);
+profilerDolanMore(files,algorithms,file_format,column,options);

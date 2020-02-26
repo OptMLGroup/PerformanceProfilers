@@ -1,4 +1,0 @@
-problem_1  9 1.0
-problem_2 10 2.0
-problem_3 11 3.0
-problem_4 11 4.0
