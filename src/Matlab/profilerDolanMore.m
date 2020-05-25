@@ -5,7 +5,7 @@ function profilerDolanMore(files,algorithms,file_format,column,options)
 % Author      : Frank E. Curtis
 % Description : Generates a Dolan & Moré performance profile up to maximum
 %               ratio of "tau".
-% Input(s)    : files       ~ array of input file names
+% Inputs      : files       ~ array of input file names
 %               algorithms  ~ array of corresponding algorithm names
 %               file_format ~ string indicating format of input files
 %               column      ~ column of input files with performance measure
@@ -19,86 +19,20 @@ function profilerDolanMore(files,algorithms,file_format,column,options)
 %               tau_max     ~ limit for horizontal axis;
 %                             positive scalar (default = infinity)
 
-% Read options
+% Read data
+readData;
+
+% Read local options
 if ~isfield(options,'log_scale')
   log_scale = false;
 else
   log_scale = options.log_scale;
-end
-if ~isfield(options,'plot_bw')
-  plot_bw = false;
-else
-  plot_bw = options.plot_bw;
-end
-if ~isfield(options,'plot_color')
-  plot_color = true;
-else
-  plot_color = options.plot_color;
 end
 if ~isfield(options,'tau_max')
   tau_max = inf;
 else
   tau_max = options.tau_max;
 end
-
-% Determine number of algorithms
-num_algorithms = length(algorithms);
-
-% Check that number of files == number of algorithms
-if (length(files) ~= num_algorithms)
-  error('profilerDolanMore: Number of file names not equal to the number of algorithm names provided.\n');
-end
-
-% Open files
-f_in = cell(num_algorithms,1);
-for i = 1:num_algorithms
-  f_in{i} = fopen(files{i},'r');
-  if (f_in{i} == -1)
-    error('profilerDolanMore: Could not open input file: %s\n',files{i});
-  end
-end
-
-% Read raw data
-raw_data = cell(num_algorithms,1);
-for i = 1:num_algorithms
-  raw_data{i} = textscan(f_in{i},file_format);
-end
-
-% Close data files
-for i = 1:num_algorithms
-  fclose(f_in{i});
-end
-
-% Confirm that the same number of lines has been read from all files
-for i = 2:num_algorithms
-  if length(raw_data{1}{1}) ~= length(raw_data{i}{1})
-    msg = ['profilerDolanMore: Number of lines read from input file     : ' files{1} '\n' ...
-           '                   differs from number read from input file : ' files{i} '.'];
-    error(msg);
-  end
-end
-
-% Set number of problems
-num_problems = length(raw_data{1}{1});
-
-% Construct matrix of values for profile
-data = zeros(num_problems,num_algorithms);
-for i = 1:num_algorithms
-  data(:,i) = raw_data{i}{column};
-end
-
-% Check that values are numeric
-if ~isnumeric(data)
-  error('profilerDolanMore: Performance measures include non-numeric value.');
-end
-
-% Check that values are nonzero
-if sum(sum(data==0))
-  error('profilerDolanMore: Performance measures include zero value.');
-end
-
-% Set negative values to infinity
-data(data < 0) = inf;
 
 % Construct vector of best values by row
 best_by_row = min(data,[],2);

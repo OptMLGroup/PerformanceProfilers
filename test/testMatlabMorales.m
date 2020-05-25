@@ -1,9 +1,9 @@
-function testMatlabDolanMore
+function testMatlabMorales
 
-% testMatlabDolanMore
+% testMatlabMorales
 %
 % Author      : Frank E. Curtis
-% Description : Tests Matlab implementation of Dolan and Moré profiler.
+% Description : Tests Matlab implementation of Morales profiler.
 % Note        : This file provides the following inputs:
 %
 % files       ~ names of input files containing performance measure data
@@ -11,7 +11,7 @@ function testMatlabDolanMore
 % file_format ~ string indicating format of each line of input files
 % column      ~ column containing performance measure data of interest
 % options     ~ struct of (optional) options
-%               see profilerDolanMore for more information about options
+%               see profilerMorales for more information about options
 %
 % Example : Suppose that there are two input files:
 %
@@ -33,8 +33,6 @@ function testMatlabDolanMore
 % >> algorithms = {'Algorithm 1','Algorithm 2'};
 % >> file_format = '%s %d %f';
 % >> column = 2;
-% >> options.log_scale = true;
-% >> options.max_ratio = inf;
 %
 % Notes :
 % - Use a negative value to indicate failure to solve a problem
@@ -60,14 +58,11 @@ file_format = '%s %d %f';
 % Column to consider
 column = 2;
 
-% Log scale?
-options.log_scale = false;
-
-% Maximum ratio?
-options.tau_max = inf;
+% Color plot
+options.ratio_max = 1;
 
 % Add location of profiler to path
 addpath('../src/Matlab/');
 
 % Call profiler
-profilerDolanMore(files,algorithms,file_format,column,options);
+profilerMorales(files,algorithms,file_format,column,options);
